@@ -19,37 +19,41 @@ def generate_room_code():
     global code_dev_increase
 
     while True:
-
         code = ''.join(
-
             random.choices(
-
-                string.ascii_uppercase +
-
-                string.digits,
-
+                string.ascii_uppercase + string.digits,
                 k=6
             )
         )
 
-        if code not in rooms:
-        
-            code_dev = os.getenv("code")
-            
-            if code_dev == "build":
-                print(f"[SISTEMA]: room code: {code}")
-                return code
-            else:   
-                if code_dev in rooms:
-                    code_dev_increase += 1
-                    
-                    if code_dev[-1].isdigit():
-                        code_dev = code_dev[:-1] + str(int(code_dev[-1]) + code_dev_increase)
-                    else:
-                        code_dev = f"{code_dev}{code_dev_increase}"
-                print(f"[SISTEMA]: dev room code: {code_dev}")
-                return code_dev
+        if code in rooms:
+            continue
 
+        code_dev = os.getenv("code")
+
+        # Produção
+        if code_dev == "build":
+            print(f"[SISTEMA]: room code: {code}")
+            return code
+
+        # Desenvolvimento
+        if not code_dev:
+            # Se a variável não existir, usa o código aleatório
+            print(f"[SISTEMA]: room code: {code}")
+            return code
+
+        dev_code = code_dev
+
+        if dev_code in rooms:
+            code_dev_increase += 1
+            dev_code = f"{dev_code}{code_dev_increase}"
+
+            while dev_code in rooms:
+                code_dev_increase += 1
+                dev_code = f"{code_dev}{code_dev_increase}"
+
+        print(f"[SISTEMA]: dev room code: {dev_code}")
+        return dev_code
 
 def create_room(room_id, host_sid, max_players=6):
 

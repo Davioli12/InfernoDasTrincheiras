@@ -2,7 +2,10 @@
 // Inferno das Trincheiras — game.js
 // =============================================================
 
-const socket = io();
+const socket = io("https://davioli12.pythonanywhere.com", {
+    transports: ["polling"],
+    upgrade: false
+});
 socket.emit('update', { status: 'running' });
 
 let currentRoom = null;
