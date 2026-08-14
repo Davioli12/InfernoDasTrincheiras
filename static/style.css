@@ -1,0 +1,975 @@
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+:root{
+
+    --bg: #15140f;
+    --panel: #211f18;
+    --panel-alt: #2a271d;
+    --line: #4a4533;
+
+    --gold: #c9a23f;
+    --allies-blue: #5c8aa8;
+    --central-red: #a8513f;
+
+    --text: #ece6d6;
+    --text-dim: #a89f86;
+}
+
+body{
+
+    background:var(--bg);
+    color:var(--text);
+
+    font-family:
+        "Source Sans 3",
+        Segoe UI,
+        sans-serif;
+
+    min-height:100vh;
+}
+
+h1, h2, h3{
+
+    font-family: "Oswald", sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+.container{
+
+    width:100%;
+    max-width:1400px;
+
+    margin:auto;
+
+    padding:20px;
+}
+
+/* ========================= */
+/* TELA DE ENTRADA            */
+/* ========================= */
+
+#join-screen{
+
+    min-height:90vh;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+}
+
+img {
+    
+    display:block;
+
+    max-width:100%;
+
+    height: 200px;
+
+    width: 200px;
+
+    align-self:center;
+
+}
+
+
+.img-placeholder{
+
+    width:100%;
+    height:100%;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    background:#2a2a2a;
+
+    color:white;
+
+    font-weight:bold;
+
+    font-size:1.8rem;
+
+    color:var(--central-red);
+
+}
+
+.join-card{
+
+    max-width:420px;
+
+    width:100%;
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:14px;
+
+    background:var(--panel);
+
+    border:1px solid var(--line);
+
+    padding:32px 28px;
+
+    border-radius:6px;
+
+    box-shadow: 0 0 0 1px rgba(0,0,0,.3), 0 12px 30px rgba(0,0,0,.45);
+}
+
+.join-card h1{
+
+    color:var(--gold);
+
+    font-size:1.9rem;
+
+    text-align:center;
+}
+
+.join-card .subtitle{
+
+    text-align:center;
+
+    color:var(--text-dim);
+
+    font-family:"Oswald", sans-serif;
+
+    letter-spacing:0.12em;
+
+    text-transform:uppercase;
+
+    font-size:.8rem;
+
+    margin-bottom:6px;
+}
+
+.join-card hr{
+
+    border:none;
+
+    border-top:1px dashed var(--line);
+
+    margin:4px 0;
+}
+
+input,
+select,
+button{
+
+    padding:12px;
+
+    border:1px solid var(--line);
+
+    border-radius:4px;
+
+    background:var(--panel-alt);
+
+    color:var(--text);
+
+    font-size:1rem;
+
+    font-family:inherit;
+}
+
+button{
+
+    background:var(--gold);
+
+    color:#1a1606;
+
+    font-weight:600;
+
+    text-transform:uppercase;
+
+    letter-spacing:.04em;
+
+    border:none;
+
+    cursor:pointer;
+
+    transition:.15s ease;
+}
+
+button:hover{
+
+    filter:brightness(1.08);
+}
+
+.secondary-btn {
+
+    display:inline-flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    gap:8px;
+
+    padding:10px 16px;
+
+    background:rgba(255,255,255,0.08);
+
+    color:#fff;
+
+    border:1px solid rgba(255,255,255,0.14);
+
+    border-radius:8px;
+
+    font-family:'Oswald', sans-serif;
+
+    font-size:0.85rem;
+
+    font-weight:700;
+
+    letter-spacing:1px;
+
+    cursor:pointer;
+
+    transition:transform 0.15s ease, background 0.15s ease;
+
+    width:100%;
+}
+
+.secondary-btn:hover{
+
+    background:rgba(255,255,255,0.14);
+
+    transform:translateY(-1px);
+}
+
+.profile-row{
+
+    display:grid;
+
+    grid-template-columns:1fr auto;
+
+    gap:8px;
+
+    margin-bottom:12px;
+}
+
+.room-search-row{
+
+    margin-top:14px;
+}
+
+.room-list{
+
+    margin-top:12px;
+
+    display:grid;
+
+    gap:10px;
+}
+
+.room-item{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    gap:12px;
+
+    background:rgba(255,255,255,0.06);
+
+    border:1px solid rgba(255,255,255,0.12);
+
+    border-radius:10px;
+
+    padding:12px 14px;
+
+    font-size:0.92rem;
+}
+
+.room-item .room-meta{
+
+    display:grid;
+
+    gap:4px;
+
+    text-align:left;
+}
+
+.room-item button{
+
+    min-width:120px;
+}
+
+/* ========================= */
+/* TELA DE JOGO                */
+/* ========================= */
+
+#game-screen{
+
+    display:none;
+}
+
+.top-bar{
+
+    display:flex;
+
+    flex-wrap:wrap;
+
+    gap:20px;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    background:var(--panel);
+
+    border:1px solid var(--line);
+
+    border-radius:6px;
+
+    padding:14px 20px;
+
+    margin-bottom:18px;
+
+    font-family:"Source Code Pro", Consolas, monospace;
+}
+
+.top-bar span{
+
+    color:var(--gold);
+
+    font-weight:600;
+}
+
+#turn-info{
+
+    font-family:"Source Code Pro", Consolas, monospace;
+
+    color:var(--text);
+
+    letter-spacing:.02em;
+}
+
+.winner-banner{
+
+    display:none;
+
+    background:linear-gradient(135deg, #1f2937, #111827);
+
+    color:#f8f1e5;
+
+    font-family:"Oswald", sans-serif;
+
+    letter-spacing:.04em;
+
+    text-align:center;
+
+    padding:18px 20px;
+
+    border-radius:14px;
+
+    margin-bottom:18px;
+
+    box-shadow:0 12px 30px rgba(0,0,0,0.25);
+
+    border:1px solid rgba(255,255,255,0.08);
+}
+
+.winner-banner-title{
+    font-size:1.15rem;
+    font-weight:800;
+    margin-bottom:8px;
+}
+
+.winner-banner-subtitle{
+    font-size:0.98rem;
+    margin-bottom:6px;
+    line-height:1.4;
+}
+
+.winner-banner-message{
+    font-size:0.92rem;
+    opacity:0.9;
+    line-height:1.5;
+}
+
+.winner-banner-win{
+    background:linear-gradient(135deg, #1f5f35, #2e7d32);
+    color:#eef6ea;
+}
+
+.winner-banner-lose{
+    background:linear-gradient(135deg, #6f1d1b, #b91c1c);
+    color:#fff1f0;
+}
+
+.section{
+
+    background:var(--panel);
+
+    border:1px solid var(--line);
+
+    border-radius:6px;
+
+    padding:20px;
+
+    margin-bottom:18px;
+}
+
+.section h2{
+
+    color:var(--text-dim);
+
+    font-size:1.1rem;
+
+    margin-bottom:14px;
+}
+
+/* ========================= */
+/* LOBBY (pré-jogo)            */
+/* ========================= */
+
+#lobby-players{
+
+    display:flex;
+
+    flex-wrap:wrap;
+
+    gap:10px;
+
+    margin-bottom:16px;
+}
+
+.lobby-player{
+
+    background:var(--panel-alt);
+
+    border:1px solid var(--line);
+
+    border-radius:4px;
+
+    padding:8px 14px;
+}
+
+#start-game-btn{
+
+    width:100%;
+}
+
+/* ========================= */
+/* RECURSOS                   */
+/* ========================= */
+
+.resources-wrapper{
+
+    display:grid;
+
+    grid-template-columns:1fr 1fr;
+
+    gap:18px;
+
+    margin-bottom:18px;
+}
+
+.resources-wrapper h2,
+.teams-wrapper h2{
+
+    font-size:1rem;
+
+    margin-bottom:10px;
+}
+
+.resources-wrapper > div:first-child h2{
+    color:var(--allies-blue);
+}
+
+.resources-wrapper > div:last-child h2{
+    color:var(--central-red);
+}
+
+.resource-grid{
+
+    display:grid;
+
+    grid-template-columns:repeat(auto-fit,minmax(110px,1fr));
+
+    gap:10px;
+}
+
+.resource-card{
+
+    background:var(--panel-alt);
+
+    border:1px solid var(--line);
+
+    border-radius:6px;
+
+    padding:12px;
+
+    text-align:center;
+}
+
+.resource-card h4{
+
+    text-transform:uppercase;
+
+    font-size:.7rem;
+
+    letter-spacing:.06em;
+
+    color:var(--text-dim);
+
+    margin-bottom:6px;
+}
+
+.resource-card h2{
+
+    font-size:1.4rem;
+}
+
+/* ========================= */
+/* TIMES                      */
+/* ========================= */
+
+.teams-wrapper{
+
+    display:grid;
+
+    grid-template-columns:1fr 1fr;
+
+    gap:18px;
+
+    margin-bottom:18px;
+}
+
+.teams-wrapper > div:first-child h2{
+    color:var(--allies-blue);
+}
+
+.teams-wrapper > div:last-child h2{
+    color:var(--central-red);
+}
+
+#allies,
+#central{
+
+    display:grid;
+
+    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+
+    gap:14px;
+}
+
+.player-card{
+
+    background:var(--panel-alt);
+
+    border:1px solid var(--line);
+
+    border-radius:6px;
+
+    padding:14px;
+}
+
+.player-card.active-turn{
+
+    border-color:var(--gold);
+
+    box-shadow: 0 0 0 1px var(--gold);
+}
+
+.player-card.player-dead{
+
+    opacity:.45;
+}
+
+.player-header{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    margin-bottom:8px;
+}
+
+.player-header h3{
+
+    font-size:1rem;
+}
+
+.class-tag{
+
+    display:inline-block;
+
+    background:var(--gold);
+
+    color:#1a1606;
+
+    font-size:.7rem;
+
+    text-transform:uppercase;
+
+    letter-spacing:.04em;
+
+    padding:3px 8px;
+
+    border-radius:4px;
+}
+
+.hand-count{
+
+    color:var(--text-dim);
+
+    font-size:.85rem;
+
+    margin-top:6px;
+}
+
+.hp-bar{
+
+    width:100%;
+
+    height:14px;
+
+    background:var(--line);
+
+    border-radius:8px;
+
+    overflow:hidden;
+
+    margin-top:6px;
+}
+
+.hp-fill{
+
+    height:100%;
+
+    background:var(--central-red);
+
+    transition:width .2s ease;
+}
+
+/* ========================= */
+/* CARTAS                      */
+/* ========================= */
+
+#hand{
+
+    display:flex;
+    grid-auto-flow: column;
+
+    flex-wrap:wrap;
+
+    justify-content: center;
+
+    gap:14px;
+}
+
+.card{
+
+    width:190px;
+
+    min-height:220px;
+
+    background:var(--panel-alt);
+
+    border:1px solid var(--line);
+
+    border-radius:8px;
+
+    padding:14px;
+
+    cursor:pointer;
+
+    transition:.15s ease;
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:8px;
+}
+
+.card:hover{
+
+    transform:translateY(-4px);
+
+    border-color:var(--gold);
+}
+
+.card.card-disabled{
+
+    cursor:not-allowed;
+
+    opacity:.4;
+}
+
+.card.card-disabled:hover{
+
+    transform:none;
+
+    border-color:var(--line);
+}
+
+.card-type{
+
+    align-self:flex-start;
+
+    text-transform:uppercase;
+
+    font-size:.65rem;
+
+    letter-spacing:.06em;
+
+    background:var(--gold);
+
+    color:#1a1606;
+
+    padding:3px 8px;
+
+    border-radius:4px;
+}
+
+.card-title{
+
+    font-family:"Oswald", sans-serif;
+
+    font-size:1rem;
+}
+
+.card-description{
+
+    color:var(--text-dim);
+
+    font-size:.85rem;
+
+    flex-grow:1;
+}
+
+/* ========================= */
+/* LOG                         */
+/* ========================= */
+
+#log{
+
+    height:200px;
+
+    overflow-y:auto;
+
+    background:var(--panel-alt);
+
+    border:1px solid var(--line);
+
+    border-radius:6px;
+
+    padding:10px;
+
+    font-family:"Source Code Pro", Consolas, monospace;
+
+    font-size:.85rem;
+}
+
+.log-item{
+
+    padding:4px 0;
+
+    border-bottom:1px dashed var(--line);
+}
+
+.log-item:last-child{
+
+    border-bottom:none;
+}
+
+/* ========================= */
+/*      Creditos             */
+/* ========================= */
+.credits {
+    background: darkgray;
+    padding: 20px;
+    height: 100vh;
+}
+
+.credits h1 {
+    font-size: 1.2rem;
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.credits a {
+    color: var(--gold);
+    text-decoration: none;
+}
+
+.credits .description {
+    background: var(--panel-alt);
+    border-radius: 10px;
+    border: 1px solid var(--line);
+    font-size: 0.9rem;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.credits button {
+    display: block;
+    margin: 0 auto;
+    padding: 8px 16px;
+    background: var(--gold);
+    color: #1a1606;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+@media(max-width:800px){
+
+    .resources-wrapper,
+    .teams-wrapper{
+
+        grid-template-columns:1fr;
+    }
+
+    .card{
+
+        width:100%;
+    }
+}
+
+#card-overlay{
+
+    position:fixed;
+
+    inset:0;
+
+    display:none;
+
+    justify-content:center;
+
+    align-items:center;
+
+    background:rgba(0,0,0,.7);
+
+    z-index:9999;
+
+}
+
+/* ============================= */
+/* OVERLAY DAS CARTAS            */
+/* ============================= */
+
+#card-overlay{
+    position:fixed;
+    inset:0;
+    display:none;
+
+    justify-content:center;
+    align-items:center;
+
+    background:rgba(0,0,0,.82);
+
+    backdrop-filter:blur(8px);
+
+    z-index:999999;
+
+    animation:fadeOverlay .25s;
+}
+
+#card-overlay.active{
+    display:flex;
+}
+
+.card-overlay-content{
+
+    position:relative;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    animation:zoomCard .25s ease;
+
+    max-width:95vw;
+    max-height:95vh;
+
+    overflow:auto;
+}
+
+.card-overlay-close{
+
+    position:absolute;
+
+    top:15px;
+    right:15px;
+
+    width:45px;
+    height:45px;
+
+    border:none;
+    border-radius:50%;
+
+    background:#a91d1d;
+    color:#fff;
+
+    font-size:22px;
+    cursor:pointer;
+
+    transition:.2s;
+}
+
+.card-overlay-close:hover{
+
+    transform:scale(1.1);
+
+    background:#d62d2d;
+
+}
+
+.card-overlay-loading{
+
+    color:white;
+
+    font-size:22px;
+
+    font-family:sans-serif;
+}
+
+@keyframes fadeOverlay{
+
+    from{
+
+        opacity:0;
+
+    }
+
+    to{
+
+        opacity:1;
+
+    }
+
+}
+
+@keyframes zoomCard{
+
+    from{
+
+        transform:scale(.75);
+
+        opacity:0;
+
+    }
+
+    to{
+
+        transform:scale(1);
+
+        opacity:1;
+
+    }
+
+}

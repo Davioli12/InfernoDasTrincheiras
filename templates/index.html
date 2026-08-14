@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inferno das Trincheiras</title>
+    <link rel="icon" href="/static/icon/icon.png" type="image/x-icon">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Source+Sans+3:wght@400;600&display=swap">
+
+    <link rel="stylesheet" href="/static/style.css">
+
+    <style>
+        /* =====================================================
+           ESTILOS EXTRAS — Inferno das Trincheiras
+           (complementam o style.css principal)
+        ===================================================== */
+
+        /* ── Trégua banner ── */
+        .truce-banner {
+            display: none;
+            background: linear-gradient(135deg, #2c1810, #4a2c1a);
+            border: 1px solid #8B6914;
+            color: #FFD700;
+            text-align: center;
+            padding: 10px 16px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            font-size: 0.9rem;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.7;
+            }
+        }
+
+        /* ── Badge "SUA VEZ" ── */
+        .your-turn-badge {
+            display: inline-block;
+            background: #FFD700;
+            color: #000;
+            font-size: 0.65rem;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            padding: 2px 8px;
+            border-radius: 20px;
+            margin-left: 8px;
+            vertical-align: middle;
+            animation: pulse 1.5s ease-in-out infinite;
+        }
+
+        /* ── Tag "você" ── */
+        .you-tag {
+            font-size: 0.75rem;
+            color: #aaa;
+            font-weight: 400;
+        }
+
+        /* ── Tag "eliminado" ── */
+        .eliminated-tag {
+            color: #e74c3c;
+            font-weight: 700;
+            margin-top: 4px;
+            font-size: 0.85rem;
+        }
+
+        /* ── Ícone de recurso ── */
+        .resource-icon {
+            font-size: 1.5rem;
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        /* ── Cabeçalho interno da carta ── */
+        .card-header-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 6px;
+        }
+
+        .card-type-badge {
+            font-size: 0.6rem;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            color: #fff;
+            padding: 2px 7px;
+            border-radius: 4px;
+        }
+
+        .card-rarity {
+            font-size: 0.85rem;
+            font-weight: 700;
+        }
+
+        /* ── Thumb da carta (miniatura + botão ver) ── */
+        .card-thumb {
+            position: relative;
+            width: 100%;
+            height: 80px;
+            border-radius: 6px;
+            overflow: hidden;
+            margin: 6px 0;
+            background: rgba(0, 0, 0, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+
+        .card-thumb img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .card-thumb-fallback {
+            font-size: 2rem;
+            opacity: 0.3;
+        }
+
+        .card-thumb-hint {
+            position: absolute;
+            bottom: 4px;
+            right: 6px;
+            font-size: 0.65rem;
+            background: rgba(0, 0, 0, 0.7);
+            color: #FFD700;
+            padding: 2px 6px;
+            border-radius: 4px;
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+
+        .card-thumb:hover .card-thumb-hint {
+            opacity: 1;
+        }
+
+        /* ── Botão jogar carta ── */
+        .card-play-btn {
+            width: 100%;
+            margin-top: 8px;
+            padding: 7px;
+            background: linear-gradient(135deg, #8B0000, #c0392b);
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            font-family: 'Oswald', sans-serif;
+            font-size: 0.8rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: filter 0.2s, transform 0.1s;
+        }
+
+        .card-play-btn:hover {
+            filter: brightness(1.2);
+        }
+
+        .card-play-btn:active {
+            transform: scale(0.96);
+        }
+
+        /* ── Overlay de carta (fullscreen) ── */
+        #card-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            z-index: 1000;
+            background: rgba(0, 0, 0, 0.85);
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+            overflow-y: auto;
+        }
+
+        .card-overlay-inner {
+            position: relative;
+            max-width: 380px;
+            width: 100%;
+        }
+
+        .card-overlay-close {
+            position: absolute;
+            top: -14px;
+            right: -14px;
+            z-index: 10;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            background: #1a1a1a;
+            color: #aaa;
+            font-size: 1rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.2s, color 0.2s;
+        }
+
+        .card-overlay-close:hover {
+            background: #8B0000;
+            color: #fff;
+        }
+
+        .card-overlay-loading {
+            color: #aaa;
+            text-align: center;
+            padding: 2rem;
+        }
+
+        /* ── Modal de intel ── */
+        .intel-modal {
+            background: #1a1208;
+            border: 1px solid #8B6914;
+            border-radius: 12px;
+            padding: 24px;
+            max-width: 500px;
+            width: 100%;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .intel-modal h2 {
+            color: #FFD700;
+            margin-bottom: 16px;
+            font-family: 'Oswald', sans-serif;
+        }
+
+        .intel-modal h3 {
+            color: #c4a882;
+            margin: 12px 0 8px;
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .intel-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+
+        .intel-card {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 10px;
+        }
+
+        .intel-card strong {
+            display: block;
+            color: #f0e6d3;
+            font-size: 0.8rem;
+            margin: 4px 0;
+        }
+
+        .intel-card p {
+            color: #888;
+            font-size: 0.72rem;
+            line-height: 1.4;
+        }
+
+        .intel-modal button {
+            margin-top: 16px;
+            padding: 10px 24px;
+            background: #8B6914;
+            color: #FFD700;
+            border: none;
+            border-radius: 8px;
+            font-weight: 700;
+            cursor: pointer;
+            font-family: 'Oswald', sans-serif;
+            letter-spacing: 1px;
+        }
+
+        /* ── Sem cartas ── */
+        .no-cards {
+            color: #555;
+            font-style: italic;
+            text-align: center;
+            padding: 16px;
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <div class="credits" id="credits">
+        <h1>Desenvolvido por <a href="https://davioli12.github.io/portifolio"
+                target="_blank"><strong>DaviOl12</strong></a></h1>
+
+        <p class="description">
+            <strong>Inferno das Trincheiras</strong> é um jogo multiplayer de estratégia
+            inspirado na Primeira Guerra Mundial. Divididos entre <strong>Aliados</strong>
+            e <strong>Potências Centrais</strong>, os jogadores precisam trabalhar em equipe,
+            administrar recursos e utilizar cartas históricas para superar o exército inimigo.
+            Cada decisão pode mudar o rumo da batalha, tornando estratégia e cooperação
+            essenciais para alcançar a vitória.
+        </p>
+        <button id="credit-button" type="button" onclick="closeCredits()">Fechar</button>
+    </div>
+
+    <div class="container" style="display: none;">
+
+        <!-- ========================= -->
+        <!-- LOBBY                     -->
+        <!-- ========================= -->
+
+        <section id="join-screen">
+
+            <div class="join-card">
+
+                <img src="/static/icon/icon.png" alt="Inferno das Trincheiras" onerror="imageError(this)">
+
+                <p class="subtitle">Primeira Guerra Mundial</p>
+
+                <div class="profile-row">
+                    <select id="profile-select" onchange="selectProfile(this.value)">
+                        <option value="">Escolher perfil</option>
+                    </select>
+                    <button class="secondary-btn" onclick="saveProfileFromInput()">Salvar perfil</button>
+                </div>
+
+                <input id="name" placeholder="Seu nome">
+
+                <select id="max-players">
+                    <option value="2">2 Jogadores</option>
+                    <option value="4" selected>4 Jogadores</option>
+                    <option value="6">6 Jogadores</option>
+                    <option value="8">8 Jogadores</option>
+                </select>
+
+                <button onclick="createRoom()">Criar Sala</button>
+
+                <hr>
+
+                <input id="room" placeholder="Código da sala">
+                <button onclick="joinRoom()">Entrar na Sala</button>
+
+                <div class="room-search-row">
+                    <button class="secondary-btn" onclick="requestRoomList()">Buscar salas em espera</button>
+                </div>
+                <div id="room-list" class="room-list"></div>
+
+                <a href="https://davioli12.github.io/portifolio" target="_blank" class="footer-link"
+                    style="color: var(--line); display: block; text-align: center; margin-top: 16px;">Desenvolvido por
+                    <strong>Davioli12</strong></a>
+
+            </div>
+
+        </section>
+
+        <!-- ========================= -->
+        <!-- JOGO                      -->
+        <!-- ========================= -->
+
+        <section id="game-screen" style="display:none">
+
+            <!-- Barra superior -->
+            <div class="top-bar">
+                <div>Sala: <span id="room-code">------</span></div>
+                <div>Host: <span id="host-name">------</span></div>
+                <div id="turn-info">Aguardando jogadores</div>
+            </div>
+
+            <!-- Dev console (aparece apenas para conta dev) -->
+            <div id="dev-console"
+                style="display:none; padding:10px; border-radius:8px; margin:10px 0; background:#111; border:1px solid #333;">
+                <div style="display:flex; gap:8px; align-items:center; margin-bottom:8px;">
+                    <label style="color:#ccc; font-weight:700;">Console:</label>
+                    <select id="dev-command-select">
+                        <option value="set_resource">set_resource</option>
+                        <option value="set_hp">set_hp</option>
+                        <option value="finish_game">finish_game</option>
+                    </select>
+                    <button class="secondary-btn" id="dev-send-btn">Enviar</button>
+                </div>
+                <div style="display:flex; gap:8px;">
+                    <input id="dev-payload"
+                        placeholder='Payload JSON (ex: {"team":"Aliados","resource":"food","amount":999})'
+                        style="flex:1; padding:8px; background:#0d0d0d; border:1px solid #222; color:#ddd;" />
+                </div>
+                <div style="color:#888; margin-top:8px; font-size:0.85rem;">Apenas visível se seu nome coincidir com
+                    <strong>dev_name</strong> em .env
+                </div>
+            </div>
+
+            <!-- Banner de vitória -->
+            <div id="winner-banner" class="winner-banner" style="display:none"></div>
+
+            <!-- ========================= -->
+            <!-- LOBBY (pré-jogo)          -->
+            <!-- ========================= -->
+
+            <div id="lobby-section" class="section">
+
+                <h2>Jogadores na Sala</h2>
+                <div id="lobby-players"></div>
+
+                <button id="start-game-btn" onclick="startMatch()" style="display:none">
+                    ⚔️ Iniciar Partida
+                </button>
+
+            </div>
+
+            <!-- ========================= -->
+            <!-- RECURSOS                  -->
+            <!-- ========================= -->
+
+            <div id="resources-wrapper" class="resources-wrapper" style="display:none">
+
+                <div>
+                    <h2>🇫🇷 Aliados</h2>
+                    <div id="resources-allies" class="resource-grid"></div>
+                </div>
+
+                <div>
+                    <h2>🇩🇪 Potências Centrais</h2>
+                    <div id="resources-central" class="resource-grid"></div>
+                </div>
+
+            </div>
+
+            <!-- ========================= -->
+            <!-- TIMES                     -->
+            <!-- ========================= -->
+
+            <div id="teams-wrapper" class="teams-wrapper" style="display:none">
+
+                <div>
+                    <h2>🇫🇷 Aliados</h2>
+                    <div id="allies"></div>
+                </div>
+
+                <div>
+                    <h2>🇩🇪 Potências Centrais</h2>
+                    <div id="central"></div>
+                </div>
+
+            </div>
+
+            <!-- ========================= -->
+            <!-- CARTAS NA MÃO             -->
+            <!-- ========================= -->
+
+            <div class="section">
+
+                <h2>🃏 Suas Cartas</h2>
+
+                <!-- Mão do jogador — renderizada por renderHand() -->
+                <div id="hand"></div>
+
+                <div id="enemy-list">
+                    <p>Lista de inimigos:</p>
+                    <ul id="enemy-list-ul">
+                        <li>Aliados</li>
+                        <li>Centrais</li>
+                    </ul>
+                </div>
+
+                <select id="enemy-select">
+                    <option value="Aliados">Aliados</option>
+                    <option value="Centrais">Centrais</option>
+                </select>
+
+            </div>
+
+            <!-- ========================= -->
+            <!-- LOG DE EVENTOS            -->
+            <!-- ========================= -->
+
+            <div class="section">
+
+                <h2>📜 Histórico</h2>
+                <div id="log"></div>
+
+            </div>
+
+        </section>
+
+    </div>
+
+    <!-- ========================= -->
+    <!-- OVERLAY DE CARTA          -->
+    <!-- (fora do .container para  -->
+    <!--  cobrir a tela toda)      -->
+    <!-- ========================= -->
+    <!--
+
+<div id="card-overlay"></div>
+
+-->
+
+    <!-- ========================= -->
+    <!-- SCRIPTS                   -->
+    <!-- ========================= -->
+
+    <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
+    <script src="/static/game.js"></script>
+
+</body>
+
+</html>
