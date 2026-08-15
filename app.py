@@ -6,8 +6,15 @@ import sys
 import time
 import os
 from dotenv import load_dotenv
+import logging
 
 load_dotenv()
+
+logging.basicConfig(
+    filename="InfernoDasTrincheiras.log",
+    level=logging.INFO,
+    format="%(asctime)s [%(levelname)s] %(message)s"
+)
 
 from room import (
     rooms,
@@ -23,6 +30,8 @@ from room import (
     check_winner
 )
 
+logging.info("Imports com sucesso")
+
 app = Flask(__name__)
 app.config["SECRET_KEY"] = "trincheiras"
 
@@ -32,6 +41,7 @@ socketio = SocketIO(
     async_mode="threading"
 )
 
+logging.info("Configurações aplicadas")
 
 def is_dev_name(name):
     configured_name = (os.getenv("dev_name") or "").strip()
@@ -105,10 +115,14 @@ def _restart():
     # Aguarda pequeno atraso para permitir que a resposta HTTP seja enviada
     time.sleep(0.5)
 
+    logging.warning("RESTART DO SERVIDOR CHAMADO...")
+
     # Re-executa o processo Python atual com os mesmos argumentos
     try:
+        logging.warning("Executando Novamente...")
         os.execv(sys.executable, [sys.executable] + sys.argv)
-    except Exception:
+    except Exception as e:
+        logging.error(f"Erro ao executar: {e}")
         # Se execv falhar, força encerramento (o processo externo pode reiniciar)
         os._exit(1)
 
@@ -669,11 +683,18 @@ def disconnect_player():
 # ==========================
 if __name__ == "__main__":
     
-    
+    logging.info("Iniciando Servidor")
+
+    HOST = str(os.getenv("host", "127.0.0.1"))
+    PORT = int(os.getenv("port", 5000))
+    DEBUG = bool(os.getenv("debug", "False").lower() in ("true", "1", "t"))
+
+    logging.info(f"Rodando em: {HOST}:{PORT}")
+    logging.info(f"DebugMode: {DEBUG}")
 
     socketio.run(
         app,
-        host=str(os.getenv("host", "127.0.0.1")),
-        port=int(os.getenv("port", 5000)),
-        debug=bool(os.getenv("debug", "False").lower() in ("true", "1", "t"))
+        host=HOST,
+        port=PORT,
+        debug=DEBUG
     )
